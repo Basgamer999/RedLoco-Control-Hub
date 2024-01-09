@@ -45,8 +45,8 @@ modem.open(config.port)
 
 while true do
     local _, _, from, port, _, message, command = event.pull("modem_message")
-    if (message == "ss" .. pin) then
-        modem.send(from, config.port, "loc" .. from, name)
+    if (message == "ss" .. config.pin) then
+        modem.send(from, config.port, "loc" .. from, config.name)
     elseif (message == "command") then
         if (not isStringInSet(command, commands)) then
             modem.send(from, config.port, "error", "Command not found.")
