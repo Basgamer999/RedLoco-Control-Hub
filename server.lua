@@ -23,10 +23,10 @@ local function unserializeIfString(value)
 end
 
 local event = require("event")
-modem.open(config.port)
+modem.open(tonumber(config.port))
 local locs = {}
 local searchLocs = true
-modem.broadcast(config.port, "ss"..config.pin or "")
+modem.broadcast(tonumber(config.port), "ss"..tonumber(config.pin) or "")
 
 while searchLocs do
     local type, _, from, port, _, response, name = event.pull()
@@ -54,7 +54,7 @@ while searchLocs do
 end
 
 local function executeCommand(id, command)
-    modem.send(locs[id].loc, config.port, "command", command)
+    modem.send(locs[id].loc, tonumber(config.port), "command", command)
     while true do
         local type, _, from, port, _, response, result1, result2, result3 = event.pull(10, "modem_message")
         if from == locs[id].loc then
@@ -72,19 +72,19 @@ end
 while true do
     local type, _, from, port, _, message, command, id = event.pull("modem_message")
     if message == "connection create" then
-        modem.send(from, config.port, "connection created")
+        modem.send(from, tonumber(config.port), "connection created")
     elseif message == "command" then
         if (tonumber(id)) then
             local status, result1, result2, result3 = executeCommand(id, command)
             if status == "error" then
-                modem.send(from, config.port, "error", result1)
+                modem.send(from, tonumber(config.port), "error", result1)
             else
-                modem.send(from, config.port, "result", result1, result2, result3)
+                modem.send(from, tonumber(config.port), "result", result1, result2, result3)
             end
         else
-            modem.send(from, config.port, "error", "Invalid id/no id specified.")
+            modem.send(from, tonumber(config.port), "error", "Invalid id/no id specified.")
         end
     elseif message == "getAllLocs" then
-        modem.send(from, config.port, "result", serialization.serialize(locs))
+        modem.send(from, tonumber(config.port), "result", serialization.serialize(locs))
     end
 end
