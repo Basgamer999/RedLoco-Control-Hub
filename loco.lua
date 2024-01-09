@@ -1,4 +1,4 @@
-
+local config = require("config")
 local component = require("component")
 local modem = component.modem
 local serialization = require("serialization")
@@ -26,6 +26,7 @@ local commands = {
     ["getIgnition"] = true,
     ["setIgnition"] = true
 }
+
 local function serializeIfTable(value)
     if type(value) == "table" then
         return serialization.serialize(value)
@@ -40,16 +41,15 @@ function isStringInSet(str, set)
 end
 
 local event = require("event")
-local listenPort = 123
-modem.open(listenPort)
+modem.open(config.port)
 
 while true do
     local _, _, from, port, _, message, command = event.pull("modem_message")
     if (message == "ss" .. pin) then
-        modem.send(from, listenPort, "loc" .. from, name)
+        modem.send(from, config.port, "loc" .. from, name)
     elseif (message == "command") then
         if (not isStringInSet(command, commands)) then
-            modem.send(from, listenPort, "error", "Command not found.")
+            modem.send(from, config.port, "error", "Command not found.")
         else
             local code = "local result1, result2, result3 = loco." .. command .. "\nreturn result1,result2,result3"
             local success, result1, result2, result3 = pcall(load(code))
@@ -57,9 +57,9 @@ while true do
                 result1 = serializeIfTable(result1) or "success"
                 result2 = serializeIfTable(result2) or ""
                 result3 = serializeIfTable(result3) or ""
-                modem.send(from, listenPort, "result", result1, result2, result3)
+                modem.send(from, config.port, "result", result1, result2, result3)
             else
-                modem.send(from, listenPort, "error", result1)
+                modem.send(from, config.port, "error", result1)
             end
         end
     end

@@ -1,4 +1,4 @@
-
+local config = require("config")
 local component = require("component")
 local modem = component.modem
 local serialization = require("serialization")
@@ -23,10 +23,10 @@ local function unserializeIfString(value)
 end
 
 local event = require("event")
-modem.open(listenPort)
+modem.open(config.port)
 local locs = {}
 local searchLocs = true
-modem.broadcast(listenPort, "ss"..pin)
+modem.broadcast(config.port, "ss"..config.pin or "")
 
 while searchLocs do
     local type, _, from, port, _, response, name = event.pull()
@@ -54,7 +54,7 @@ while searchLocs do
 end
 
 local function executeCommand(id, command)
-    modem.send(locs[id].loc, listenPort, "command", command)
+    modem.send(locs[id].loc, config.port, "command", command)
     while true do
         local type, _, from, port, _, response, result1, result2, result3 = event.pull(10, "modem_message")
         if from == locs[id].loc then
@@ -72,19 +72,19 @@ end
 while true do
     local type, _, from, port, _, message, command, id = event.pull("modem_message")
     if message == "connection create" then
-        modem.send(from, listenPort, "connection created")
+        modem.send(from, config.port, "connection created")
     elseif message == "command" then
         if (tonumber(id)) then
             local status, result1, result2, result3 = executeCommand(id, command)
             if status == "error" then
-                modem.send(from, listenPort, "error", result1)
+                modem.send(from, config.port, "error", result1)
             else
-                modem.send(from, listenPort, "result", result1, result2, result3)
+                modem.send(from, config.port, "result", result1, result2, result3)
             end
         else
-            modem.send(from, listenPort, "error", "Invalid id/no id specified.")
+            modem.send(from, config.port, "error", "Invalid id/no id specified.")
         end
     elseif message == "getAllLocs" then
-        modem.send(from, listenPort, "result", serialization.serialize(locs))
+        modem.send(from, config.port, "result", serialization.serialize(locs))
     end
 end
