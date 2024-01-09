@@ -26,7 +26,7 @@ local event = require("event")
 modem.open(tonumber(config.port))
 local locs = {}
 local searchLocs = true
-modem.broadcast(tonumber(config.port), "ss"..tonumber(config.pin) or "")
+modem.broadcast(tonumber(config.port), "ss"..config.pin or "")
 
 while searchLocs do
     local type, _, from, port, _, response, name = event.pull()
