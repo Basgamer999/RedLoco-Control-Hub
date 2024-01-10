@@ -54,6 +54,9 @@ while searchLocs do
 end
 
 local function executeCommand(id, command)
+    if (locs[id] == nil) then
+        return "error", "Loc not found."
+    end
     modem.send(locs[id].loc, tonumber(config.port), "command", command)
     while true do
         local type, _, from, port, _, response, result1, result2, result3 = event.pull(10, "modem_message")
