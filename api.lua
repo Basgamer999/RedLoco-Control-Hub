@@ -133,4 +133,9 @@ api.setIgnition = function(id, value)
     return waitResponse()
 end
 
+api.setRedstone = function(id, value)
+    modem.send(instance.id, instance.port, "redstone", tostring(value), id)
+    return waitResponse()
+end
+
 return api
