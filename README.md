@@ -14,3 +14,6 @@ You can view every function in the wiki
 # FAQ
 Q: Does the redstone reciever work on a microcontroller? 
 A: Yes Its written specifically for the microcontroller. Make sure to use the installer and select eeprom and not directly flash to the eeprom as the code has a few other stuff on the OS version compare to the eeprom version.
+
+Q: Can the computers run headless?
+A: Yes no computer requires a screen attached to work.
