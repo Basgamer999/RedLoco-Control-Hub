@@ -18,8 +18,10 @@ Step 5. Make sure your loco and redstone clients are running before you start th
 For the api:
 
 Step 1. Setup a computer with at least a network card and a internet card.
+
 Step 2. Run `wget https://raw.githubusercontent.com/Basgamer999/backend-train-control/main/api.lua`
-Step 3. Require the libary in your code: local api = require("api")
+
+Step 3. Require the libary in your code: `local api = require("api")`
 
 # How does the api work? 
 You can view every function in the wiki
