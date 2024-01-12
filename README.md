@@ -3,7 +3,7 @@ Control multiple trains and switched or other redstone interfaces.
 
 # How to install?
 
-###For the server
+### For the server
 
 Step 1. Setup a computer with at least a network card and a internet card.
 
