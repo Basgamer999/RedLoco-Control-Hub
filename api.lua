@@ -88,7 +88,7 @@ api.setReverser = function(id, value)
     return waitResponse()
 end
 
-api.info = function(id)
+api.getPos = function(id)
     modem.send(instance.id, instance.port, "command", "getPos()", id)
     return waitResponse()
 end
