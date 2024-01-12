@@ -1,3 +1,4 @@
+--Redstone computer
 local redstone = component.proxy(component.list("redstone")())
 local modem = component.proxy(component.list("modem")())
 modem.open(port)
